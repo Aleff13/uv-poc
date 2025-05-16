@@ -36,7 +36,3 @@ jobs:
           PYTHONPATH: ./app
         run: |
           PYTHONPATH=./app uv run pytest app/tests --maxfail=1 --disable-warnings -q
-
-      - name: Kill server
-        run: |
-          pkill -f "uv run app.main:app"
