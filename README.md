@@ -54,13 +54,7 @@ source .venv/bin/activate
 If using `pyproject.toml`:
 
 ```bash
-uv pip install .
-```
-
-Or if using a `requirements.txt`:
-
-```bash
-uv pip install -r requirements.txt
+uv sync
 ```
 
 ---
@@ -68,7 +62,12 @@ uv pip install -r requirements.txt
 ### 4. Run the App
 
 ```bash
-python src/app.py
+uv run fastapi dev app/main.py
+```
+
+### 5. Run tests
+```bash
+PYTHONPATH=./app uv run pytest app/tests
 ```
 
 ---
@@ -110,10 +109,6 @@ build-backend = "setuptools.build_meta"
 - [PEP 621 - `pyproject.toml` Project Metadata](https://peps.python.org/pep-0621/)
 
 ---
-
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ## Start locally
 
