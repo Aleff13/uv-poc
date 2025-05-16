@@ -1,0 +1,42 @@
+name: Python Tests with UV server
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi uvicorn pytest httpx websockets uv
+
+      - name: Run server with uv in background
+        env:
+          PYTHONPATH: ./app
+        run: |
+          uv run app.main:app --host 127.0.0.1 --port 8000 &   # rodar em background
+          sleep 3  # esperar o servidor iniciar
+
+      - name: Run tests against running server
+        env:
+          PYTHONPATH: ./app
+        run: |
+          PYTHONPATH=./app uv run pytest app/tests --maxfail=1 --disable-warnings -q
+
+      - name: Kill server
+        run: |
+          pkill -f "uv run app.main:app"
